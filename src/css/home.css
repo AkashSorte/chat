@@ -1,0 +1,13 @@
+.grid-container {
+  display : grid;
+  grid-template-areas: 'menu main main main main main'
+                       'menu footer footer footer footer footer';
+  grid-gap: 10px;
+  padding: 10px;
+  height: 100vh;
+  width: 100vw;
+}
+
+.grid-container .menu { grid-area: menu; }
+.grid-container .main { grid-area: main; }
+.grid-container .footer { grid-area: footer; }
