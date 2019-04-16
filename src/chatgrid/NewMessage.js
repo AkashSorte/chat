@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
-import {addMessage} from "../action/chat-actions";
-import chat from '../reducer/chat.js';
-import { createStore } from 'redux';
-
+import { ADD_MESSAGE} from "../constants/chatConstants";
 export default class NewMessage extends Component {
 
 constructor(props) {
   super(props);
-  this.state = {value : ""};
+  this.state = {
+    user : props.user
+  };
 }
 
 messageSubmit = () => {
-  let message = this.state.value;
+  let message = this.input.value;
+  this.input.value="";
   if(message){
-    console.log(this.state.value);
-    const store = createStore(chat);
-    store.dispatch(addMessage(this.state.value,"me"));
+    let {store} = this.props;
+    let action = { type : ADD_MESSAGE, message : message, user: this.props.user };
+    store.dispatch(action);
   }
 }
 
 render () {
   return (
     <div>
-      message: <input type="textarea"  placeholder="message" value={this.state.value} onChange={(e) => this.setState({ value : e.target.value})}/>
+      message: <input type="textarea"  placeholder="message" ref={node=>{
+        this.input=node;
+      }}/>
       <input type="button" onClick={this.messageSubmit} value="submit" />
     </div>
   );

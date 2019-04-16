@@ -1,10 +1,10 @@
 import {combineReducers} from "redux";
-import message from "./messages.js";
-import user from "./users.js";
+import {sendMessage} from "./messages.js";
+import {user} from "./users.js";
 
 
 const chat = combineReducers({
-  message,
+  sendMessage,
   user
 });
 

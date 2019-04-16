@@ -3,31 +3,56 @@ import './css/home.css';
 import Menubar from './chatgrid/Menubar';
 import MessageList from './chatgrid/MessageList';
 import NewMessage from './chatgrid/NewMessage';
-
-import { Provider,connect } from 'react-redux';
-import { createStore } from 'redux';
-import chat from './reducer/chat.js'
-const store = createStore(chat);
+import * as Action from "./action/chat-actions"
+import PropTypes from "prop-types"
+import RegisterModal from "./chatgrid/RegisterModal"
+import { ADD_USER} from "./constants/chatConstants";
 
 
 class Home extends Component {
-
-  constructor(props) {
+  static propTypes = {
+    users : PropTypes.array,
+    messages : PropTypes.arrayOf(
+      PropTypes.shape({
+        user : PropTypes.string,
+        message : PropTypes.string
+      })
+    )
+  }
+  constructor(props){
     super(props);
-    this.state = {
-      messages : [],
-      users : []
-    }
+    this.state = { modalFlag : true, currUser : "" };
+  }
+
+  register = (name) => {
+    this.setState({
+      currUser : name,
+      modalFlag : false
+    });
+      let {store} = this.props;
+      let action = { type : ADD_USER, name: name };
+      store.dispatch(action);
+  }
+
+  getRegisterModal = () => {
+    return (
+      <RegisterModal register={this.register} />
+    )
   }
 
   render() {
+    let messages = this.props.store.getState().sendMessage.messages;
+    let users = this.props.store.getState().user.users;
+    let {currUser} = this.state;
+
     return (
-      <div className="grid-container">
-      <Provider store={store}>
-        <div className="menu"><Menubar users={this.state.users}/></div>
-        <div className="main"><MessageList messages={this.state.messages}/></div>
-        <div className="footer"><NewMessage /></div>
-      </Provider>
+      <div>
+          <div className="grid-container">
+            <div className="menu"><Menubar me={currUser} users={users}/></div>
+            <div className="main"><MessageList messages={messages}/></div>
+            <div className="footer"><NewMessage user={currUser}  store={this.props.store}/></div>
+          </div>
+          {this.state.modalFlag ? this.getRegisterModal() : null}
       </div>
     );
   }
@@ -35,15 +60,4 @@ class Home extends Component {
 }
 
 
-const mapActionsToProps = (dispatch)=> {
-  return{
-    getP:()=>{}
-  }
-}
-
-const mapStateToProps = (state) =>{
-  return{
-  xyz:"dad"
-}
-}
-export default connect(mapStateToProps,mapActionsToProps)(Home);
+export default Home;

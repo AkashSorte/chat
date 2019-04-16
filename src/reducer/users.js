@@ -1,16 +1,16 @@
 import * as Actions from '../constants/chatConstants.js';
 
-const user = (state = [], action) => {
-  switch (action) {
+export const user = (state ={ users : [] }, action) => {
+  switch (action.type) {
     case Actions.ADD_USER:
-      return state.concat({
-        name : action.name,
-        id : action.id
-      })
+      return {
+        users : state.users.concat({
+          name : action.name,
+          id : action.id
+        })
+      }
       break;
     default:
       return state;
   }
 }
-
-export default user;

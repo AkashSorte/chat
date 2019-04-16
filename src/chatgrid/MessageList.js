@@ -8,10 +8,11 @@ export default class MessageList extends Component {
 
   render() {
     let messageLists =  this.props.messages;
+    console.log(messageLists);
     return (
     <div>
       <ul>
-        {messageLists.map(msg => <li> {msg.user}  :  {msg.message} </li> )}
+        {messageLists.map(msg => <li key={msg.message}> {msg.user}  :  {msg.message} </li> )}
       </ul>
     </div>
   );
